@@ -1,0 +1,18 @@
+.contenedor{
+    display: flex;
+    flex-direction: row;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+}
+
+.divisas {
+    display: flex;
+    flex-direction: column;
+}
+
+input:invalid:required {
+    background-color: red;
+}

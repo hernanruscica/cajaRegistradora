@@ -4,15 +4,47 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caja Registradora</title>    
+    <title>Caja Registradora</title>  
+    <link rel="stylesheet" href="style.css">  
 </head>
 <body>
-    <h1></h1> 
     <!-- 
     Caja Registradora 
-    https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/javascript-algorithms-and-data-structures-projects/cash-register
-    
+    https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/javascript-algorithms-and-data-structures-projects/cash-register    
     -->
+    <h3>Caja Registradora</h3> 
+    <div class="contenedor">
+        <div class="column">
+            <div class="row input">
+                <label for="compra-valor">Valor de la compra</label>
+                <input type = number step = 0.01 
+                value="0.00" min="0"
+                id="compra-valor" required>        
+            </div>
+            <div class="row input">
+                <label for="pago-valor">Pago</label>
+                <input type = number step = 0.01 
+                value="0.00" min="0"
+                id="pago-valor" required>        
+            </div>
+            <button class="row" id="btn-vuelto"
+            onclick="darVuelto('compra-valor', 'pago-valor')"
+            >Dar vuelto</button>
+            <div class="row">
+                <h4 class="divisas-titulo">Efectivo en caja</h4>                
+                <div class="divisas" id="divisas">
+                   <!-- <label class="divisa" id="divisa-nombre-cantidad">nombre divisa = cantidad divisa</label>-->   
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="resultados">
+                <p class="resultados-text">
+                    resultados
+                </p>
+            </div>
+        </div>
+    </div>
     <script src="CajaRegistradora.js"></script>
 </body>
 </html>
