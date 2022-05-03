@@ -48,11 +48,12 @@ const divisas = [
 function calcularTotalEfectivoEnCaja(efectivoEnCaja){
     let acumuladorEfectivo = 0;
     efectivoEnCaja.forEach(element => {
-        acumuladorEfectivo += element[1];        
+        acumuladorEfectivo += Number.parseFloat(element[1]).toFixed(2);        
     }); 
     acumuladorEfectivo = Number.parseFloat(acumuladorEfectivo).toFixed(2);
     return acumuladorEfectivo 
 }
+//console.log(calcularTotalEfectivoEnCaja([["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]));
 
 function calcularCambioDebido(pago, precio){
     if (precio > pago) return -1;
@@ -71,18 +72,20 @@ function sacarCambio(cambio, divisa, efectivo){
     const divisasEfectivoOrdenado = [];
     const cambioAdar = [];   
 
+    console.log(efectivo);
+
     for (let i = 0; i < longitudDivisa; i++){
-        divisasEfectivoOrdenado.push([divisa[i][1], efectivo[i][0], efectivo[i][1]]);
+        divisasEfectivoOrdenado.push([divisa[i][1], efectivo[i][0], Number.parseFloat(efectivo[i][1]).toFixed(2)]);
     }
     divisasEfectivoOrdenado.sort((a, b) => b[0] - a[0]);
 
     divisasEfectivoOrdenado.forEach((element) => {
         while (element[2] > 0 && cambio > 0 && cambio >= element[0]) {                                
-                element[2] -= element[0];
-                cambio -= element[0];
+                element[2] -= Number.parseFloat(element[0]).toFixed(2);
+                cambio -= Number.parseFloat(element[0]).toFixed(2);
                 cambio = Number.parseFloat(cambio).toFixed(2);
                 element[2] = Number.parseFloat(element[2]).toFixed(2);                  
-                cambioAdar.push([element[1], element[0]]);       
+                cambioAdar.push([element[1], Number.parseFloat(element[0]).toFixed(2)]);       
         }
     });    
     //console.log(cambioAdar);    
@@ -95,13 +98,17 @@ function actualizarEfectivoEnCaja(efectivoEnCajaAnterior, actualizacionCaja){
         for (let j = 0; j < actualizacionCaja.length; j++){
             if (efectivoEnCajaAnterior[i][0] == actualizacionCaja[j][0]) {
                 //console.log('encontrado: ', + efectivoEnCajaAnterior[i][1]);
-                efectivoEnCajaAnterior[i][1] -= actualizacionCaja[j][1];
+                efectivoEnCajaAnterior[i][1] -= Number.parseFloat(actualizacionCaja[j][1]).toFixed(2);
                 efectivoEnCajaAnterior[i][1] = Number.parseFloat(efectivoEnCajaAnterior[i][1]).toFixed(2);
             }
         }
     }   
     return efectivoEnCajaAnterior;
 }
+/*
+console.log(actualizarEfectivoEnCaja([["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]
+, [["PENNY", 0.03], ["NICKEL", 0.05], ["DIME", 0.4]]));
+*/
 
 function sacarDivisasRepetidas(cambioAdar, divisas){   
     const cambioAdarAretornar = [];      
@@ -111,8 +118,8 @@ function sacarDivisasRepetidas(cambioAdar, divisas){
         let sumatoriaDivisas = 0;
         
         if (cambioAdarTemporal.length !== 0){
-            cambioAdarTemporal.forEach((cambio) => sumatoriaDivisas += cambio[1]);    
-            sumatoriaDivisas = parseFloat(sumatoriaDivisas).toFixed(2);
+            cambioAdarTemporal.forEach((cambio) => sumatoriaDivisas += Number.parseFloat(cambio[1]).toFixed(2));    
+            sumatoriaDivisas = Number.parseFloat(sumatoriaDivisas).toFixed(2);
             cambioAdarAretornar.push([divisas[0], sumatoriaDivisas]);
         }
     });
@@ -126,28 +133,32 @@ function revisarCajaRegistradora(precioCompra, pagoEfectuado, efectivoEnCaja){
 
     if (precioCompra > pagoEfectuado) return {estado: "PAGO_INSUFICIENTE", change: []};
 
-    let totalEfectivoEnCaja = calcularTotalEfectivoEnCaja(ejemploEfectivoEnCaja);
-    let cambioDebido = calcularCambioDebido(pagoEfectuado,  precioCompra);    
-    let tengoCambioExacto = sacarCambio(cambioDebido, divisas, efectivoEnCaja);    
     
+    let totalEfectivoEnCaja = calcularTotalEfectivoEnCaja(efectivoEnCaja);
+    let cambioDebido = calcularCambioDebido(pagoEfectuado,  precioCompra);    
+    let tengoCambioExacto = sacarCambio(cambioDebido, divisas, efectivoEnCaja);
+    let efectivoEnCajaActualizado = 0;    
+    //console.log(tengoCambioExacto);
     //console.clear();
     console.log(`Total efectivo en caja: ${totalEfectivoEnCaja}`);
     console.log(`Cambio debido: ${cambioDebido}`);        
+    //console.log(tengoCambioExacto);
 
     /*determino el estado a retornar*/    
-    if (totalEfectivoEnCaja < cambioDebido) return {estado: "SALDOS_INSUFICIENTES", cambio: []};
-    if (totalEfectivoEnCaja === cambioDebido) return {estado: "CAJA_CERRADA", cambio: sacarDivisasRepetidas(tengoCambioExacto, divisas)};
-    if (tengoCambioExacto === false) return {estado: "SALDOS_INSUFICIENTES", cambio: []};
+    if (totalEfectivoEnCaja < cambioDebido) return {estado: "SALDOS_INSUFICIENTES", cambio: [], estadoCaja: efectivoEnCaja};
+    if (totalEfectivoEnCaja === cambioDebido) return {estado: "CAJA_CERRADA", cambio: sacarDivisasRepetidas(tengoCambioExacto, divisas), estadoCaja: efectivoEnCaja};
+    if (tengoCambioExacto === false) return {estado: "SALDOS_INSUFICIENTES", cambio: [], estadoCaja: efectivoEnCaja};
     //esta ultima actualizacion del estado de la caja registradora no lo piden en el ejercicio.
-    else ejemploEfectivoEnCaja = actualizarEfectivoEnCaja(ejemploEfectivoEnCaja, tengoCambioExacto);
+    else efectivoEnCajaActualizado = actualizarEfectivoEnCaja(efectivoEnCaja, tengoCambioExacto);
     
     return {
         estado: 'OPEN',
-        cambio: sacarDivisasRepetidas(tengoCambioExacto, divisas)
+        cambio: sacarDivisasRepetidas(tengoCambioExacto, divisas),
+        estadoCaja: efectivoEnCajaActualizado
     }
 }
 /* TODAS LAS PRUEBAS DE FREECODECAMP PASADAS !! */
-//console.log(revisarCajaRegistradora(19.5, 20, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]));
+//console.log(revisarCajaRegistradora(0.5, 100, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]));
 //console.log(revisarCajaRegistradora( 19.5, 20, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]] ));
 //console.log(revisarCajaRegistradora( 3.26, 100, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]] ));
 //console.log(revisarCajaRegistradora( 19.5, 20, [["PENNY", 0.01], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 0], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]] ));
@@ -159,20 +170,21 @@ function darVuelto(compraValorId, pagoValorId){
     const $compraValorId = document.getElementById(compraValorId);
     const $pagoValorId = document.getElementById(pagoValorId);  
 
-    const valorCompra = $compraValorId.value;
-    const valorPago = $pagoValorId.value;
+    let valorCompra = parseFloat($compraValorId.value);
+    let valorPago = parseFloat($pagoValorId.value);
+    const resultadoRevisarCajaRegistradora = revisarCajaRegistradora(valorCompra, valorPago, ejemploEfectivoEnCaja);      
 
-    console.log(valorCompra);
-    console.log(valorPago);
-    console.log(revisarCajaRegistradora(valorCompra, valorPago, ejemploEfectivoEnCaja));
+    console.log(valorCompra, typeof(valorCompra));
+    console.log(valorPago, typeof(valorPago));
+    console.log(resultadoRevisarCajaRegistradora);
+
+    //console.log(`Total efectivo en caja: ${acumulador}`);
     
     mostrarEfectivoEnCaja('divisas', ejemploEfectivoEnCaja);       
 }
 
 function mostrarEfectivoEnCaja(divisasId, efectivoEnCaja){
     
-    //let totalEfectivoEnCaja = calcularTotalEfectivoEnCaja(efectivoEnCaja);
-    //console.log(efectivoEnCaja);
     const $divisasId = document.getElementById(divisasId);    
     $divisasId.innerHTML = "";
     const agregarDivisa = (divisa) => {
@@ -183,11 +195,9 @@ function mostrarEfectivoEnCaja(divisasId, efectivoEnCaja){
         $divisasId.appendChild($labelDivisa);   
     }
     efectivoEnCaja.map(divisa => agregarDivisa(divisa));
-/*
-    const $totalEfectivoLabel = document.createElement("label");
-    $totalEfectivoLabel.innerHTML = `Total Efectivo Caja = ${totalEfectivoEnCaja}`;
-    $divisasId.appendChild($totalEfectivoLabel);
-  */  
+
+    //$divisasId.innerHTML += calcularTotalEfectivoEnCaja(efectivoEnCaja);
+ 
 }
 
 mostrarEfectivoEnCaja('divisas', ejemploEfectivoEnCaja);
