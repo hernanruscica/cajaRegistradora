@@ -21,17 +21,17 @@ ordenados de mayor a menor, con el valor de "cambio".
 */   
 
 //efectivo en caja con comas...
-
+//nombre de la divisa,  cantidad de efectivo de esa divisa
 let ejemploEfectivoEnCaja = [
-    ["PENNY", 0],
-    ["NICKEL", 0],
-    ["DIME", 0],
-    ["QUARTER", 0.50],
-    ["ONE", 0],
-    ["FIVE", 0],
-    ["TEN", 0],
-    ["TWENTY", 0],
-    ["ONE HUNDRED", 0]
+    ["PENNY", 1.01],
+    ["NICKEL", 0.55],
+    ["DIME", 5.2],
+    ["QUARTER", 5.75],
+    ["ONE", 33],
+    ["FIVE", 25],
+    ["TEN", 80],
+    ["TWENTY", 180],
+    ["ONE HUNDRED", 400]
   ]
 
   //divisas con comas...
@@ -76,7 +76,7 @@ function calcularTotalEfectivoEnCaja(efectivoEnCaja){
 
 function calcularCambioDebido(pago, precio){
     if (precio > pago) return -1;
-    let cambio = (pago - precio)
+    let cambio = Number.parseFloat(pago - precio).toFixed(2);
     return cambio;
 }
 //console.log(calcularCambioDebido(100, 5));
@@ -173,7 +173,7 @@ function revisarCajaRegistradora(precioCompraPasado, pagoEfectuadoPasado, efecti
     let totalEfectivoEnCaja = calcularTotalEfectivoEnCaja(efectivoEnCaja);
     let cambioDebido = calcularCambioDebido(pagoEfectuado,  precioCompra);    
 
-    //console.log(`total cambio en caja: ${totalEfectivoEnCaja} cambio debido: ${cambioDebido}`);
+    console.log(`total cambio en caja: ${totalEfectivoEnCaja} cambio debido: ${cambioDebido}`);
     
     let resultadoSacarCambio = sacarCambio(cambioDebido, divisasSinComas, efectivoEnCaja);    
     let tengoCambioExacto = resultadoSacarCambio[1];
@@ -185,15 +185,16 @@ function revisarCajaRegistradora(precioCompraPasado, pagoEfectuadoPasado, efecti
     if (!tengoCambioExacto) {          
         return {estado: "SALDOS_INSUFICIENTES_CAMBIO", cambio: [], estadoCaja: ponerComas(efectivoEnCaja)};
         }
-    //esta ultima actualizacion del estado de la caja registradora no lo piden en el ejercicio.        
+    //esta ultima actualizacion del estado de la caja registradora no lo piden en el ejercicio.     
+    let estadoCajaConComas = ponerComas(actualizarEfectivoEnCaja(efectivoEnCaja, cambioExacto));   
+    let cambioExactoConComas = ponerComas(cambioExacto);
     return {
         estado: 'OPEN',
-        cambio: cambioExacto, //si le pongo el ponerComas a cambioExacto, se jode el estadoCaja
-        estadoCaja: ponerComas(actualizarEfectivoEnCaja(efectivoEnCaja, cambioExacto))
-    }
-    
+        cambio: cambioExactoConComas, 
+        estadoCaja: estadoCajaConComas
+    }    
 }
-console.log(revisarCajaRegistradora(1, 1.25, ejemploEfectivoEnCaja));
+//console.log(revisarCajaRegistradora(1, 1.25, ejemploEfectivoEnCaja));
 
 
 
@@ -216,21 +217,26 @@ function darVuelto(compraValorId, pagoValorId){
 
     let valorCompra = parseFloat($compraValorId.value);
     let valorPago = parseFloat($pagoValorId.value);
+    let cambioDebido = calcularCambioDebido(valorPago, valorCompra);
+    let totalEfectivoEnCaja = calcularTotalEfectivoEnCaja(efectivoEnCaja);    
     const resultadoRevisarCajaRegistradora = revisarCajaRegistradora(valorCompra, valorPago, efectivoEnCaja);      
 
-    //console.clear();
-    console.log(valorCompra, typeof(valorCompra));
-    console.log(valorPago, typeof(valorPago));
+    console.clear();
+    console.log(`Su compra: ${valorCompra}`);
+    console.log(`Paga con ${valorPago}`);
+    console.log(`Su cambio: ${cambioDebido}`);    
+    console.log(`Total efectivo en caja: ${totalEfectivoEnCaja}`);    
     console.log(resultadoRevisarCajaRegistradora);
-    ejemploEfectivoEnCaja = resultadoRevisarCajaRegistradora.estadoCaja;
 
-    //console.log(`Total efectivo en caja: ${acumulador}`);
+    ejemploEfectivoEnCaja = resultadoRevisarCajaRegistradora.estadoCaja;    
     
-    mostrarEfectivoEnCaja('divisas', ejemploEfectivoEnCaja);       
+    //mostrarEfectivoEnCaja(valorCompra, valorPago, 'divisas', ejemploEfectivoEnCaja);       
 }
 
-function mostrarEfectivoEnCaja(divisasId, efectivoEnCaja){
+function mostrarEfectivoEnCaja(valorCompra, valorPago, divisasId, efectivoEnCaja){
+
     
+    /*
     const $divisasId = document.getElementById(divisasId);    
     $divisasId.innerHTML = "";
     const agregarDivisa = (divisa) => {
@@ -241,7 +247,7 @@ function mostrarEfectivoEnCaja(divisasId, efectivoEnCaja){
         $divisasId.appendChild($labelDivisa);   
     }
     efectivoEnCaja.map(divisa => agregarDivisa(divisa));
-
+*/
     //$divisasId.innerHTML += calcularTotalEfectivoEnCaja(efectivoEnCaja);
  
 }
