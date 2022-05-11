@@ -2,6 +2,8 @@
 <h1>Caja registradora de freecodecamp</h1>
 <p>Proyecto final del curso de javascript y estructura de datos de <a href="https://freecodecamp.org">FreeCodeCamp</a>
 <p>Enunciado <a href="https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/javascript-algorithms-and-data-structures-projects/cash-register" target = "_BLANK">aca</a></p>
+<a href="https://hernanruscica.github.io/cajaRegistradora/"> Live Demo </a>
+<h2>Enunciado traducido</h2>
 <p>
     Diseñar una funcion de caja registradora checkCashRegister() que acepte el precio de compra como 
 primer parametro (price), pago como segundo parametro (cash), y efectivo en la caja (cid) 
