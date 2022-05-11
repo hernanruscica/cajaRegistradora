@@ -230,26 +230,45 @@ function darVuelto(compraValorId, pagoValorId){
 
     ejemploEfectivoEnCaja = resultadoRevisarCajaRegistradora.estadoCaja;    
     
-    //mostrarEfectivoEnCaja(valorCompra, valorPago, 'divisas', ejemploEfectivoEnCaja);       
+    mostrarEfectivoEnCaja(valorCompra, valorPago, 'efectivo-caja', ejemploEfectivoEnCaja);           
+    mostrarEfectivoEnCaja(valorCompra, valorPago, 'vuelto', resultadoRevisarCajaRegistradora.cambio); 
 }
 
-function mostrarEfectivoEnCaja(valorCompra, valorPago, divisasId, efectivoEnCaja){
-
+function mostrarEfectivoEnCaja(valorCompra, valorPago, divisasId, efectivoEnCaja){    
     
-    /*
     const $divisasId = document.getElementById(divisasId);    
     $divisasId.innerHTML = "";
+    
     const agregarDivisa = (divisa) => {
-        const $labelDivisa = document.createElement("label");        
-        $labelDivisa.classList.add('divisa');
-        $labelDivisa.setAttribute("id", `${divisa[0]}`);
-        $labelDivisa.innerHTML = `${divisa[0]} = ${divisa[1]}`;
-        $divisasId.appendChild($labelDivisa);   
+        let nombreDivisaActual = divisa[0];
+        let cantidadDivisaActual = divisa[1];
+
+        const $divDivisa = document.createElement("div");
+        $divDivisa.classList.add("divisa");
+        const $labelNombreDivisa = document.createElement("label");        
+        const $labelCantidadDivisa = document.createElement("label"); 
+        
+        $labelNombreDivisa.setAttribute("id", `divisa-${nombreDivisaActual}`);
+        $labelNombreDivisa.innerHTML = `${nombreDivisaActual}`;
+
+        $labelCantidadDivisa.setAttribute("id", `cantidad-${nombreDivisaActual}`);
+        $labelCantidadDivisa.innerHTML = `${cantidadDivisaActual}`;
+
+        $divDivisa.appendChild($labelNombreDivisa);
+        $divDivisa.appendChild($labelCantidadDivisa);
+          
+        $divisasId.appendChild($divDivisa);
+        
     }
     efectivoEnCaja.map(divisa => agregarDivisa(divisa));
-*/
-    //$divisasId.innerHTML += calcularTotalEfectivoEnCaja(efectivoEnCaja);
+    
+    //Muestra el Total efectivo en caja
+    let efectivoTotalEnCaja = calcularTotalEfectivoEnCaja(efectivoEnCaja);
+    const $labelEfectivoTotal = document.createElement("label");
+    $labelEfectivoTotal.classList.add("divisa");
+    $labelEfectivoTotal.innerHTML = `Efectivo total:    $ ${efectivoTotalEnCaja}`;
+    $divisasId.appendChild($labelEfectivoTotal);
  
 }
 
-//mostrarEfectivoEnCaja('divisas', ejemploEfectivoEnCaja);
+mostrarEfectivoEnCaja(0, 0, 'efectivo-caja', ejemploEfectivoEnCaja);

@@ -17,31 +17,35 @@
         <div class="column">
             <div class="row input">
                 <label for="compra-valor">Valor de la compra</label>
-                <input type = "number" min = 0  step= 0.01                 
+                <input type = "number" min = 0  step= 0.01  
+                placeholder="$0.00"               
                 id="compra-valor" required>        
             </div>
             <div class="row input">
                 <label for="pago-valor">Pago</label>
-                <input type = "number" min = 0 step= 0.01                  
+                <input type = "number" min = 0 step= 0.01 
+                placeholder="$0.00"                 
                 id="pago-valor" required>        
             </div>
-            <button class="row" id="btn-vuelto"
+            <button class="row btn" id="btn-vuelto"
             onclick="darVuelto('compra-valor', 'pago-valor')"
             >Dar vuelto</button>
-            <div class="row">
+            <div class="column resultados">
                 <h4 class="divisas-titulo">Efectivo en caja</h4>                
-                <div class="divisas" id="divisas">
-                   <!-- <label class="divisa" id="divisa-nombre-cantidad">nombre divisa = cantidad divisa</label>-->   
+                <div class="divisas" id="efectivo-caja">
+                    <!--
+                    <div class="divisa">
+                        <label  id="divisa-nombre">nombre-divisa </label>  
+                        <label  id="divisa-cantidad"> $cantidad</label> 
+                    </div>-->
                 </div>
             </div>
         </div>
         <div class="column">
             <div class="resultados">
-                <p class="resultados-text">
-                    <h4 class="resultados-titulo">Estado de la caja: OPEN</h4>
-                    <h4 class="resultados-titulo">Su vuelto:</h4>
-                    <label class="divisa">"Nombre Divisa" X unidades</label>
-                </p>
+                <h4 class="resultados-titulo">Estado de la caja: OPEN</h4>
+                <h4 class="resultados-titulo">Su vuelto:</h4>
+                <label class="divisas" id="vuelto">"Nombre Divisa" X unidades</label>
             </div>
         </div>
     </div>

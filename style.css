@@ -1,18 +1,70 @@
+*,
+*::after,
+*::before{
+    margin: 0;
+    padding : 0;
+    box-sizing: border-box;
+}
+
 .contenedor{
     display: flex;
     flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    border: solid 1px black;
+    width: 90%;
+    margin: 0 auto;
 }
-
 .column {
     display: flex;
     flex-direction: column;
+    width: 300px;
+    padding: 1em 0em ;
+    border: dotted 1px #333;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.4em 0;
+    font-size: 1.2em;
+}
+
+.row>input {
+    width: 100px;    
+    padding: 0.2em 0em  0.2em 0.4em ;
+    font-size: 1em;
+}
+
+.btn{
+    padding: 0.5em;
+    cursor: pointer;
+}
+.btn:hover{
+    background-color: #BBB;
+}
+
+.resultados{
+    width: 100%;
+    
 }
 
 .divisas {
     display: flex;
     flex-direction: column;
 }
+.divisa {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border: solid 1px green;
+    font-size: 1.2em;
+    padding: 0.4em 0.2em;
+}
 
 input:invalid:required {
-    background-color: red;
+    border: solid 1px red;
+    background-color: rgb(255, 128, 128);
 }
