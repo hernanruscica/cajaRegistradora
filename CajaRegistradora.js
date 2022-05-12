@@ -180,7 +180,7 @@ function revisarCajaRegistradora(precioCompraPasado, pagoEfectuadoPasado, efecti
     let cambioExacto = resultadoSacarCambio[0]; 
 
     /*determino el estado a retornar  - problema con SALDOS_INSUFICIENTES_CAMBIO sigue descontando aunque no pueda dar el cambio por falta de billetes*/
-    if (totalEfectivoEnCaja < cambioDebido) return {estado: "SALDOS_INSUFICIENTES", cambio: [], estadoCaja: efectivoEnCaja};    
+    if (totalEfectivoEnCaja < cambioDebido) return {estado: "SALDOS_INSUFICIENTES", cambio: [], estadoCaja: ponerComas(efectivoEnCaja)};    
     if (totalEfectivoEnCaja === cambioDebido) return {estado: "CAJA_CERRADA", cambio: ponerComas(cambioExacto), estadoCaja: actualizarEfectivoEnCaja(efectivoEnCaja, cambioExacto)};
     if (!tengoCambioExacto) {          
         return {estado: "SALDOS_INSUFICIENTES_CAMBIO", cambio: [], estadoCaja: ponerComas(efectivoEnCaja)};
@@ -230,14 +230,26 @@ function darVuelto(compraValorId, pagoValorId){
 
     ejemploEfectivoEnCaja = resultadoRevisarCajaRegistradora.estadoCaja;    
     
-    mostrarEfectivoEnCaja(valorCompra, valorPago, 'efectivo-caja', ejemploEfectivoEnCaja);           
-    mostrarEfectivoEnCaja(valorCompra, valorPago, 'vuelto', resultadoRevisarCajaRegistradora.cambio); 
+    mostrarEfectivoEnCaja('efectivo-caja', ejemploEfectivoEnCaja, "estado-caja", resultadoRevisarCajaRegistradora.estado);           
+    //mostrarEfectivoEnCaja('vuelto', resultadoRevisarCajaRegistradora.cambio); 
+
+    resultadoRevisarCajaRegistradora.cambio.forEach((divisa) => {       
+        let nombreCambioActual = divisa[0];     
+
+        //flashDivisa(`divisa-${nombreCambioActual}`);
+        flashDivisa(`cantidad-${nombreCambioActual}`);
+    });    
+}
+const saludar = () => {
+    console.log("hola");
 }
 
-function mostrarEfectivoEnCaja(valorCompra, valorPago, divisasId, efectivoEnCaja){    
+function mostrarEfectivoEnCaja(divisasId, efectivoEnCaja, estadoCajaId, estadoCaja){    
     
     const $divisasId = document.getElementById(divisasId);    
     $divisasId.innerHTML = "";
+    const $estadoCajaId = document.getElementById(estadoCajaId);
+    $estadoCajaId.innerHTML = "";
     
     const agregarDivisa = (divisa) => {
         let nombreDivisaActual = divisa[0];
@@ -249,9 +261,11 @@ function mostrarEfectivoEnCaja(valorCompra, valorPago, divisasId, efectivoEnCaja
         const $labelCantidadDivisa = document.createElement("label"); 
         
         $labelNombreDivisa.setAttribute("id", `divisa-${nombreDivisaActual}`);
+        $labelNombreDivisa.classList.add("divisa-nombre-cantidad");
         $labelNombreDivisa.innerHTML = `${nombreDivisaActual}`;
 
         $labelCantidadDivisa.setAttribute("id", `cantidad-${nombreDivisaActual}`);
+        $labelCantidadDivisa.classList.add("divisa-nombre-cantidad");
         $labelCantidadDivisa.innerHTML = `${cantidadDivisaActual}`;
 
         $divDivisa.appendChild($labelNombreDivisa);
@@ -268,7 +282,16 @@ function mostrarEfectivoEnCaja(valorCompra, valorPago, divisasId, efectivoEnCaja
     $labelEfectivoTotal.classList.add("divisa");
     $labelEfectivoTotal.innerHTML = `Efectivo total:    $ ${efectivoTotalEnCaja}`;
     $divisasId.appendChild($labelEfectivoTotal);
+
+    $estadoCajaId.innerHTML = `Estado de la caja: ${estadoCaja}`;
  
 }
+mostrarEfectivoEnCaja('efectivo-caja', ejemploEfectivoEnCaja, "estado-caja", "OPEN");
 
-mostrarEfectivoEnCaja(0, 0, 'efectivo-caja', ejemploEfectivoEnCaja);
+
+function flashDivisa(divisaId){
+    const $divisaLabel = document.getElementById(divisaId);
+    $divisaLabel.classList.add("divisa-flasheada");
+    setInterval(() => {$divisaLabel.classList.remove("divisa-flasheada")}, 500);
+}
+

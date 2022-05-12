@@ -28,8 +28,8 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding: 0.4em 0;
-    font-size: 1.2em;
+    padding: 0.2em 0;
+    font-size: 1em;
 }
 
 .row>input {
@@ -39,7 +39,7 @@
 }
 
 .btn{
-    padding: 0.5em;
+    padding: 0.2em;
     cursor: pointer;
 }
 .btn:hover{
@@ -60,11 +60,22 @@
     flex-direction: row;
     justify-content: space-between;
     border: solid 1px green;
-    font-size: 1.2em;
-    padding: 0.4em 0.2em;
+    font-size: 1em;
+    padding: 0.2em 0.2em;
 }
 
 input:invalid:required {
     border: solid 1px red;
-    background-color: rgb(255, 128, 128);
+    background-color: rgb(255, 128, 128);    
+}
+
+.divisa-nombre-cantidad{
+    transform: scale(1);
+    transition: all 1s ease-in-out;
+}
+
+.divisa-flasheada{
+    background-color: red;    
+    transform: scale(1.6);
+    transition: all 1s ease-in-out;
 }
