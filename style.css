@@ -47,8 +47,7 @@
 }
 
 .resultados{
-    width: 100%;
-    
+    width: 100%;    
 }
 
 .divisas {
@@ -69,12 +68,12 @@ input:invalid:required {
     background-color: rgb(255, 128, 128);    
 }
 
-.divisa-nombre-cantidad{
+.denominacion-nombre-cantidad{
     transform: scale(1);
     transition: all 1s ease-in-out;
 }
 
-.divisa-flasheada{
+.denominacion-flasheada{
     background-color: red;    
     transform: scale(1.6);
     transition: all 1s ease-in-out;

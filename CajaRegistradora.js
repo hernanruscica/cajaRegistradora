@@ -230,68 +230,89 @@ function darVuelto(compraValorId, pagoValorId){
 
     ejemploEfectivoEnCaja = resultadoRevisarCajaRegistradora.estadoCaja;    
     
-    mostrarEfectivoEnCaja('efectivo-caja', ejemploEfectivoEnCaja, "estado-caja", resultadoRevisarCajaRegistradora.estado);           
-    //mostrarEfectivoEnCaja('vuelto', resultadoRevisarCajaRegistradora.cambio); 
+    mostrarEfectivoEnCaja('efectivo-caja', ejemploEfectivoEnCaja, "estado-caja", resultadoRevisarCajaRegistradora.estado);   
+    mostrarResultados("cambio-total", cambioDebido, "estado-caja", resultadoRevisarCajaRegistradora.estado, 
+                    "cambio-denominaciones", resultadoRevisarCajaRegistradora.cambio);                    
 
     resultadoRevisarCajaRegistradora.cambio.forEach((divisa) => {       
-        let nombreCambioActual = divisa[0];     
-
-        //flashDivisa(`divisa-${nombreCambioActual}`);
-        flashDivisa(`cantidad-${nombreCambioActual}`);
+        let nombreCambioActual = divisa[0];            
+        flashDenominacion(`cantidad-${nombreCambioActual}`);
     });    
 }
-const saludar = () => {
-    console.log("hola");
+/* Devuelve esto:
+    <div class="divisa">
+        <label  id="nombre-denominacion">nombre-denominacion </label>  
+        <label  id="cantidad-denominacion"> $cantidad</label> 
+    </div>  */
+const armarDenominacion = (denominacionNombreId, denominacionNombre, denominacionCantidadId, denominacionCantidad, denominacionClass) => {
+
+    const $fragment = document.createDocumentFragment();
+    const $divDenominaciones = document.createElement("div");
+    const $denominacionNombreLabel = document.createElement("label");
+    const $denominacionCantidadLabel = document.createElement("label");
+
+    $divDenominaciones.classList.add(denominacionClass);
+    $denominacionNombreLabel.setAttribute("id", denominacionNombreId);
+    $denominacionCantidadLabel.setAttribute("id", denominacionCantidadId);
+    /*denominacion-nombre-cantidad*/
+    $denominacionCantidadLabel.classList.add("denominacion-nombre-cantidad");
+
+    $denominacionNombreLabel.innerHTML = denominacionNombre;
+    $denominacionCantidadLabel.innerHTML = denominacionCantidad;
+
+    $divDenominaciones.appendChild($denominacionNombreLabel);
+    $divDenominaciones.appendChild($denominacionCantidadLabel);
+    
+    $fragment.appendChild($divDenominaciones);
+    return $fragment;        
 }
 
 function mostrarEfectivoEnCaja(divisasId, efectivoEnCaja, estadoCajaId, estadoCaja){    
     
-    const $divisasId = document.getElementById(divisasId);    
-    $divisasId.innerHTML = "";
+    const $divisas = document.getElementById(divisasId);    
+    $divisas.innerHTML = "";
     const $estadoCajaId = document.getElementById(estadoCajaId);
     $estadoCajaId.innerHTML = "";
-    
-    const agregarDivisa = (divisa) => {
-        let nombreDivisaActual = divisa[0];
-        let cantidadDivisaActual = divisa[1];
 
-        const $divDivisa = document.createElement("div");
-        $divDivisa.classList.add("divisa");
-        const $labelNombreDivisa = document.createElement("label");        
-        const $labelCantidadDivisa = document.createElement("label"); 
-        
-        $labelNombreDivisa.setAttribute("id", `divisa-${nombreDivisaActual}`);
-        $labelNombreDivisa.classList.add("divisa-nombre-cantidad");
-        $labelNombreDivisa.innerHTML = `${nombreDivisaActual}`;
+    efectivoEnCaja.forEach((denominacion) => {
+        let nombre = denominacion[0], cantidad = denominacion[1];
+        console.log(nombre, cantidad);
+        let $unaDenominacion = armarDenominacion(`nombre-${nombre}`, nombre, `cantidad-${nombre}`, cantidad, "divisa");
+        $divisas.appendChild($unaDenominacion);
+    });
 
-        $labelCantidadDivisa.setAttribute("id", `cantidad-${nombreDivisaActual}`);
-        $labelCantidadDivisa.classList.add("divisa-nombre-cantidad");
-        $labelCantidadDivisa.innerHTML = `${cantidadDivisaActual}`;
-
-        $divDivisa.appendChild($labelNombreDivisa);
-        $divDivisa.appendChild($labelCantidadDivisa);
-          
-        $divisasId.appendChild($divDivisa);
-        
-    }
-    efectivoEnCaja.map(divisa => agregarDivisa(divisa));
-    
     //Muestra el Total efectivo en caja
     let efectivoTotalEnCaja = calcularTotalEfectivoEnCaja(efectivoEnCaja);
     const $labelEfectivoTotal = document.createElement("label");
     $labelEfectivoTotal.classList.add("divisa");
     $labelEfectivoTotal.innerHTML = `Efectivo total:    $ ${efectivoTotalEnCaja}`;
-    $divisasId.appendChild($labelEfectivoTotal);
-
-    $estadoCajaId.innerHTML = `Estado de la caja: ${estadoCaja}`;
- 
+    $divisas.appendChild($labelEfectivoTotal);
 }
+
+function mostrarResultados(cambioTotalId, cambioTotalValor, estadoCajaId, estadoCajaValor,cambioDenominacionesId, cambioDenominacionesValor){
+    const $cambioTotal = document.getElementById(cambioTotalId);
+    const $estadoCaja = document.getElementById(estadoCajaId);
+    const $cambioDenominaciones = document.getElementById(cambioDenominacionesId);
+
+    $cambioTotal.innerHTML = `Cambio a dar: $ ${cambioTotalValor}`;
+    $estadoCaja.innerHTML = `Estado caja: ${estadoCajaValor}`;
+    $cambioDenominaciones.innerHTML = "";
+    
+    cambioDenominacionesValor.forEach((denominacion) => {
+        let nombre = denominacion[0], cantidad = denominacion[1];
+        let $unaDenominacion = armarDenominacion("denominacion-nombre", nombre, "denominacion-cantidad", cantidad, "divisa");
+        $cambioDenominaciones.appendChild($unaDenominacion);
+        //$cambioDenominaciones.appendChild($unaDenominacion) ;
+    })       
+}
+
+mostrarResultados("cambio-total", 0, "estado-caja", "", "cambio-denominaciones", []);
+
 mostrarEfectivoEnCaja('efectivo-caja', ejemploEfectivoEnCaja, "estado-caja", "OPEN");
 
-
-function flashDivisa(divisaId){
-    const $divisaLabel = document.getElementById(divisaId);
-    $divisaLabel.classList.add("divisa-flasheada");
-    setInterval(() => {$divisaLabel.classList.remove("divisa-flasheada")}, 500);
+function flashDenominacion(denominacionId){
+    const $denominacionLabel = document.getElementById(denominacionId);
+    $denominacionLabel.classList.add("denominacion-flasheada");
+    setInterval(() => {$denominacionLabel.classList.remove("denominacion-flasheada")}, 500);
 }
 

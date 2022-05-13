@@ -8,48 +8,52 @@
     <link rel="stylesheet" href="style.css">  
 </head>
 <body>
-    <!-- 
-    Caja Registradora 
-    https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/javascript-algorithms-and-data-structures-projects/cash-register    
-    -->
-    <h3>Caja Registradora</h3>  
-    <div class="contenedor">
-        <div class="column">
-            <div class="row input">
-                <label for="compra-valor">Valor de la compra</label>
-                <input type = "number" min = 0  step= 0.01  
-                placeholder="$0.00"               
-                id="compra-valor" required>        
-            </div>
-            <div class="row input">
-                <label for="pago-valor">Pago</label>
-                <input type = "number" min = 0 step= 0.01 
-                placeholder="$0.00"                 
-                id="pago-valor" required>        
-            </div>
-            <button class="row btn" id="btn-vuelto"
-            onclick="darVuelto('compra-valor', 'pago-valor')"
-            >Dar vuelto</button>
-            <div class="column resultados">
-                <h4 class="divisas-titulo">Efectivo en caja</h4>                
-                <div class="divisas" id="efectivo-caja">
-                    <!--
-                    <div class="divisa">
-                        <label  id="divisa-nombre">nombre-divisa </label>  
-                        <label  id="divisa-cantidad"> $cantidad</label> 
-                    </div>-->
-                </div>
-            </div>
+<!-- 
+Caja Registradora 
+https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/javascript-algorithms-and-data-structures-projects/cash-register    
+-->
+<h3>Caja Registradora</h3>  
+<div class="contenedor">
+    <div class="column">
+        <div class="row input">
+            <label for="compra-valor">Valor de la compra</label>
+            <input type = "number" min = 0  step= 0.01  
+            placeholder="$0.00"               
+            id="compra-valor" required>        
         </div>
-        <div class="column">
-            <div class="resultados">
-                <h4 class="resultados-titulo" id = "estado-caja"></h4>
-                <h4 class="resultados-titulo">Su vuelto:</h4>
-                <label class="divisas" id="vuelto">"Nombre Divisa" X unidades</label>
+
+        <div class="row input">
+            <label for="pago-valor">Pago</label>
+            <input type = "number" min = 0 step= 0.01 
+            placeholder="$0.00"                 
+            id="pago-valor" required>        
+        </div>
+
+        <button class="row btn" id="btn-vuelto"
+        onclick="darVuelto('compra-valor', 'pago-valor')"
+        >Dar vuelto</button>
+
+        <div class="column efectivo-en-caja">
+            <h3 class="efectivo-en-caja__titulo">Efectivo en caja</h3>                
+            <div class="denominaciones" id="efectivo-caja">
+                <!--
+                <div class="divisa">
+                    <label  id="divisa-nombre">nombre-divisa </label>  
+                    <label  id="divisa-cantidad"> $cantidad</label> 
+                </div>-->
             </div>
         </div>
     </div>
-    
-    <script src="CajaRegistradora.js"></script>
+    <!--mostrarResultados(cambioTotalId, estadoCajaId, cambioDenominacionesId)-->
+    <div class="column">
+        <div class="resultados">
+            <h3 class="resultados_titulo" id = "cambio-total">Su cambio: $1.11</h3>
+            <label class="resultados__estado-caja" id = "estado-caja"></label>
+            <label class="resultados__cambio-denominaciones" id = "cambio-denominaciones">Su vuelto:</label>                
+        </div>
+    </div>
+</div>
+
+<script src="CajaRegistradora.js"></script>
 </body>
 </html>
